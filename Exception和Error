@@ -1,0 +1,32 @@
+  一、Exception和Error都继承了Throwable类。
+  二、Exception和Error体现了Java平台设计者对不同异常的分类：
+    Exception是程序正常运行中，可以预料的意外情况，可被捕获和处理；
+    Error是指在正常情况下，不大可能出现的情况，绝大多数的Error会使程序处于非正常的、不可恢复的状态，不需要捕获，比如常见的OutOfMemoryError类。
+  三、Exception又分为可检查异常和不检查异常：
+    可检查异常在源代码里必须显示地进行捕获，是编译期检查的一部分。Error是不可检查的。
+    不可检查异常就是运行时异常，例如NullPointerException，ArrayIndexOutOfBoundsException之类的，通常是可以编码避免的逻辑错误，并不要求在编译期强制要求捕获。
+  四、ClassNotFoundException和NoClassDefFoundError的区别：
+    ClassNotFoundException的产生原因：就是找不到指定的class。 ClassNotFoundException发生在加载阶段。
+    常见的场景就是：
+      1 调用class的forName方法时，找不到指定的类
+      2 ClassLoader 中的 findSystemClass() 方法时，找不到指定的类
+      3 ClassLoader 中的 loadClass() 方法时，找不到指定的类
+    NoClassDefFoundError发生在初始化阶段
+    常见的场景就是：
+      1 类依赖的class或者jar不存在
+      2 类文件存在，但是存在不同的域中
+      3 大小写问题，javac编译的时候是无视大小的，很有可能你编译出来的class文件就与想要的不一样！这个没有做验证。
+      
+    
+    NoClassDefFoundError是一个错误(Error)，而ClassNOtFoundException是一个异常，在Java中对于错误和异常的处理是不同的，我们可以从异常中恢复程序但却不应该尝试从错误中恢复程序。
+    ClassNotFoundException的产生原因：
+
+    Java支持使用Class.forName方法来动态地加载类，任意一个类的类名如果被作为参数传递给这个方法都将导致该类被加载到JVM内存中，如果这个类在类路径中没有被找到，那么此时就会在运行时抛出ClassNotFoundException异常。
+
+    ClassNotFoundException的产生原因：
+
+    Java支持使用Class.forName方法来动态地加载类，任意一个类的类名如果被作为参数传递给这个方法都将导致该类被加载到JVM内存中，如果这个类在类路径中没有被找到，那么此时就会在运行时抛出ClassNotFoundException异常。
+    ClassNotFoundException的产生原因主要是：
+    Java支持使用反射方式在运行时动态加载类，例如使用Class.forName方法来动态地加载类时，可以将类名作为参数传递给上述方法从而将指定类加载到JVM内存中，如果这个类在类路径中没有被找到，那么此时就会在运行时抛出ClassNotFoundException异常。
+    解决该问题需要确保所需的类连同它依赖的包存在于类路径中，常见问题在于类名书写错误。
+    另外还有一个导致ClassNotFoundException的原因就是：当一个类已经某个类加载器加载到内存中了，此时另一个类加载器又尝试着动态地从同一个包中加载这个类。通过控制动态类加载过程，可以避免上述情况发生。
